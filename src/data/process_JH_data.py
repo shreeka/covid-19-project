@@ -4,12 +4,12 @@ import numpy as np
 from datetime import datetime
 
 
-def store_relational_JH_data():
-    ''' Transformes the COVID data in a relational data set
+def transform_relational_JH_data():
+    ''' Transforms the COVID data into a relational data set
 
     '''
 
-    data_path = 'data/raw/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
+    data_path = '../data/raw/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
     pd_raw = pd.read_csv(data_path)
 
     pd_data_base = pd_raw.rename(columns={'Country/Region': 'country',
@@ -31,10 +31,10 @@ def store_relational_JH_data():
         'datetime64[ns]')
 
     pd_relational_model.to_csv(
-        'data/processed/COVID_relational_confirmed.csv', sep=';', index=False)
+        '../data/processed/COVID_relational_confirmed.csv', sep=';', index=False)
     print(' Number of rows stored: ' + str(pd_relational_model.shape[0]))
 
 
 if __name__ == '__main__':
 
-    store_relational_JH_data()
+    transform_relational_JH_data()

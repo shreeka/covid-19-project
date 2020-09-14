@@ -10,8 +10,8 @@ from dash.dependencies import Input, Output, State
 import plotly.graph_objects as go
 
 import os
-print(os.getcwd())
-df_input_large = pd.read_csv('data/processed/COVID_final_set.csv', sep=';')
+
+df_input_large = pd.read_csv('../data/processed/COVID_final_set.csv', sep=';')
 
 
 fig = go.Figure()
@@ -20,12 +20,7 @@ app = dash.Dash()
 app.layout = html.Div([
 
     dcc.Markdown('''
-    #  Applied Data Science on COVID-19 data
-
-    Goal of the project is to teach data science by applying a cross industry standard process,
-    it covers the full walkthrough of: automated data gathering, data transformations,
-    filtering and machine learning to approximating the doubling time, and
-    (static) deployment of responsive dashboard.
+    # COVID-19 Dashboard
 
     '''),
 
@@ -38,7 +33,7 @@ app.layout = html.Div([
         id='country_drop_down',
         options=[{'label': each, 'value': each}
                  for each in df_input_large['country'].unique()],
-        value=['US', 'Germany', 'Italy'],  # which are pre-selected
+        value=['US', 'Germany', 'Nepal'],  # which are pre-selected
         multi=True
     ),
 
@@ -70,7 +65,7 @@ app.layout = html.Div([
      Input('doubling_time', 'value')])
 def update_figure(country_list, show_doubling):
 
-    if 'doubling_rate' in show_doubling:
+    if ('confirmed_DR' in show_doubling) or ('confirmed_filtered_DR' in show_doubling):
         my_yaxis = {'type': "log",
                     'title': 'Approximated doubling rate over 3 days (larger numbers are better #stayathome)'
                     }
@@ -84,13 +79,12 @@ def update_figure(country_list, show_doubling):
 
         df_plot = df_input_large[df_input_large['country'] == each]
 
-        if show_doubling == 'doubling_rate_filtered':
+        if show_doubling == 'confirmed_filtered_DR':
             df_plot = df_plot[['state', 'country', 'confirmed', 'confirmed_filtered', 'confirmed_DR',
                                'confirmed_filtered_DR', 'date']].groupby(['country', 'date']).agg(np.mean).reset_index()
         else:
             df_plot = df_plot[['state', 'country', 'confirmed', 'confirmed_filtered', 'confirmed_DR',
                                'confirmed_filtered_DR', 'date']].groupby(['country', 'date']).agg(np.sum).reset_index()
-       # print(show_doubling)
 
         traces.append(dict(x=df_plot.date,
                            y=df_plot[show_doubling],
