@@ -1,7 +1,7 @@
-covid-19 project
+COVID-19 Dashboard Prototype (Enterprise Data Science Project 2020)
 ==============================
+A dashboard to observe the spread of the corona virus over the globe.
 
-A short description of the project.
 
 Project Organization
 ------------
